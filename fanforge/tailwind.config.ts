@@ -22,8 +22,8 @@ const config: Config = {
         "text-tertiary":  "#8b7355",
       },
       fontFamily: {
-        display: ['"Playfair Display"', "Georgia", "serif"],
-        body:    ['"Inter"', "system-ui", "sans-serif"],
+        display: ['"Cairo"', "system-ui", "sans-serif"],
+        body:    ['"Cairo"', "system-ui", "sans-serif"],
       },
       borderRadius: {
         sm:   "8px",

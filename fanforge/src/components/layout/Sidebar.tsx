@@ -9,22 +9,17 @@ import {
   Sparkles,
   Image,
   Trophy,
-  Settings,
   Search,
-  HelpCircle,
 } from "lucide-react";
 
 const NAV_ITEMS = [
   { href: "/", label: "Home", icon: Home },
   { href: "/generate", label: "Generate", icon: Sparkles },
-  { href: "#kits", label: "My Kits", icon: Image },
-  { href: "#leaderboard", label: "Leaderboard", icon: Trophy },
+  { href: "/kits", label: "My Kits", icon: Image },
+  { href: "/leaderboard", label: "Leaderboard", icon: Trophy },
 ];
 
-const BOTTOM_ITEMS = [
-  { href: "#settings", label: "Settings", icon: Settings },
-  { href: "#help", label: "Help", icon: HelpCircle },
-];
+const BOTTOM_ITEMS: typeof NAV_ITEMS = [];
 
 export function Sidebar() {
   const [expanded, setExpanded] = useState(true);
@@ -47,11 +42,13 @@ export function Sidebar() {
           expanded ? "px-3" : "justify-center"
         )}
       >
-        <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-gold to-orange flex items-center justify-center text-white font-display font-bold text-base shrink-0 shadow-warm-sm">
-          F
-        </div>
+        <img
+          src="/mascot.png"
+          alt="FanForge mascot"
+          className="w-9 h-9 rounded-xl object-cover shrink-0"
+        />
         {expanded && (
-          <span className="font-body font-bold text-deep-orange text-[15px] tracking-tight">
+          <span className="font-display font-bold text-deep-orange text-[15px] tracking-tight">
             FanForge
           </span>
         )}
@@ -100,41 +97,6 @@ export function Sidebar() {
         })}
       </nav>
 
-      {/* Bottom items */}
-      <div className="flex flex-col gap-0.5 mt-2 pt-3 border-t border-white/30">
-        {BOTTOM_ITEMS.map((item) => (
-          <Link
-            key={item.href}
-            href={item.href}
-            className={cn(
-              "nav-item",
-              !expanded && "justify-center px-0 py-2.5"
-            )}
-            title={!expanded ? item.label : undefined}
-          >
-            <item.icon size={18} className="shrink-0" strokeWidth={1.8} />
-            {expanded && <span>{item.label}</span>}
-          </Link>
-        ))}
-      </div>
-
-      {/* User avatar */}
-      <div
-        className={cn(
-          "flex items-center gap-3 mt-3 pt-3 border-t border-white/30",
-          expanded ? "px-3" : "justify-center"
-        )}
-      >
-        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-orange to-deep-orange flex items-center justify-center text-white font-body font-bold text-[10px] shrink-0">
-          FF
-        </div>
-        {expanded && (
-          <div className="flex-1 min-w-0">
-            <p className="text-xs font-medium text-text-primary truncate">Fan User</p>
-            <p className="text-[10px] text-text-tertiary truncate">Free plan</p>
-          </div>
-        )}
-      </div>
     </aside>
   );
 }

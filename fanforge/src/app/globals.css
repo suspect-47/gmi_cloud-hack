@@ -6,7 +6,7 @@
    FONTS
    ═══════════════════════════════════════════ */
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap');
 
 /* ═══════════════════════════════════════════
    CSS VARIABLES — Single source of truth
@@ -63,8 +63,8 @@
   --radius-pill:  999px;
 
   /* Fonts */
-  --font-display: 'Playfair Display', Georgia, serif;
-  --font-body:    'Inter', system-ui, sans-serif;
+  --font-display: 'Cairo', system-ui, sans-serif;
+  --font-body:    'Cairo', system-ui, sans-serif;
 
   /* Transitions */
   --ease-out:         cubic-bezier(0.16, 1, 0.3, 1);
@@ -403,4 +403,109 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.5);
   color: var(--color-text-primary);
   border-bottom-left-radius: 4px;
+}
+
+/* ═══════════════════════════════════════════
+   VOICE OVERLAY
+   ═══════════════════════════════════════════ */
+
+.voice-overlay-backdrop {
+  background: radial-gradient(ellipse at center, rgba(44, 24, 16, 0.85) 0%, rgba(26, 15, 7, 0.95) 100%);
+  backdrop-filter: blur(24px) saturate(120%);
+  -webkit-backdrop-filter: blur(24px) saturate(120%);
+}
+
+/* Mascot states */
+.mascot-idle {
+  animation: mascotFloat 3s ease-in-out infinite;
+}
+
+.mascot-listening {
+  animation: mascotPulse 1s ease-in-out infinite;
+}
+
+.mascot-thinking {
+  animation: mascotThink 1.5s ease-in-out infinite;
+}
+
+.mascot-speaking {
+  animation: mascotBounce 0.4s ease-in-out infinite;
+}
+
+@keyframes mascotFloat {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-6px); }
+}
+
+@keyframes mascotPulse {
+  0%, 100% { transform: scale(1); border-color: rgba(255,255,255,0.4); }
+  50%      { transform: scale(1.04); border-color: var(--color-gold); }
+}
+
+@keyframes mascotThink {
+  0%, 100% { transform: rotate(0deg) scale(1); }
+  25%      { transform: rotate(-2deg) scale(0.98); }
+  75%      { transform: rotate(2deg) scale(0.98); }
+}
+
+@keyframes mascotBounce {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50%      { transform: translateY(-4px) scale(1.03); }
+}
+
+/* Ring animations */
+.voice-ring-listening {
+  border: 3px solid var(--color-gold);
+  box-shadow: 0 0 40px rgba(241, 196, 15, 0.3), 0 0 80px rgba(241, 196, 15, 0.1);
+  animation: ringPulseGold 1.2s ease-in-out infinite;
+}
+
+.voice-ring-speaking {
+  border: 3px solid var(--color-orange);
+  box-shadow: 0 0 40px rgba(230, 126, 34, 0.3);
+  animation: ringSpeaking 0.6s ease-in-out infinite;
+}
+
+.voice-ring-thinking {
+  border: 3px dashed var(--color-text-tertiary);
+  animation: ringSpin 4s linear infinite;
+}
+
+.voice-ring-mid-listening {
+  border: 2px solid rgba(241, 196, 15, 0.2);
+  animation: ringPulseMid 1.5s ease-in-out infinite;
+}
+
+.voice-ring-mid-speaking {
+  border: 2px solid rgba(230, 126, 34, 0.15);
+  animation: ringSpeaking 0.8s ease-in-out infinite 0.1s;
+}
+
+@keyframes ringPulseGold {
+  0%, 100% { opacity: 0.6; transform: scale(1); }
+  50%      { opacity: 1; transform: scale(1.08); }
+}
+
+@keyframes ringPulseMid {
+  0%, 100% { opacity: 0.3; transform: scale(1); }
+  50%      { opacity: 0.6; transform: scale(1.12); }
+}
+
+@keyframes ringSpeaking {
+  0%, 100% { opacity: 0.5; transform: scale(1); }
+  50%      { opacity: 1; transform: scale(1.06); }
+}
+
+@keyframes ringSpin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+.voice-thinking-emoji {
+  animation: thinkBob 1.5s ease-in-out infinite;
+}
+
+@keyframes thinkBob {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50%      { transform: translateY(-4px) rotate(10deg); }
 }

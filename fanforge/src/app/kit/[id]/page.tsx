@@ -8,7 +8,7 @@ import { Skeleton } from "@/components/shared/Skeleton";
 import { Button } from "@/components/shared/Button";
 import { TEAM_FLAGS } from "@/lib/constants";
 import { timeAgo } from "@/lib/utils";
-import type { Kit } from "@/hooks/usePipeline";
+import type { Kit } from "@/hooks/PipelineContext";
 import { ArrowLeft, ExternalLink } from "lucide-react";
 import Link from "next/link";
 

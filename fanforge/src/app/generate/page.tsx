@@ -2,14 +2,14 @@
 
 import { TopBar } from "@/components/layout/TopBar";
 import { TeamFallback } from "@/components/voice/TeamFallback";
-import { KitGallery } from "@/components/kit/KitGallery";
-import { usePipeline } from "@/hooks/usePipeline";
+import { usePipelineContext } from "@/hooks/PipelineContext";
 import { useToast } from "@/components/shared/Toast";
 import { ProgressRing } from "@/components/shared/ProgressRing";
+import { KitGallery } from "@/components/kit/KitGallery";
 import { MessageSquare } from "lucide-react";
 
 export default function GeneratePage() {
-  const { status, kit, error, generate } = usePipeline();
+  const { status, kit, error, generate } = usePipelineContext();
   const { toast } = useToast();
 
   const handleTextSubmit = async (team: string, message: string) => {
@@ -44,14 +44,6 @@ export default function GeneratePage() {
                     AI pipeline running — generating images, voice, and copy.
                   </p>
                 </div>
-                <div className="flex flex-col gap-2 text-sm font-body text-text-tertiary">
-                  <Step label="Intent extraction" done />
-                  <Step label="Team enrichment" done={status !== "submitting"} />
-                  <Step label="Creative direction" />
-                  <Step label="Image generation (3x)" />
-                  <Step label="Voice synthesis" />
-                  <Step label="Assembling kit" />
-                </div>
               </div>
             ) : (
               <>
@@ -64,13 +56,16 @@ export default function GeneratePage() {
                       Fastest way: use the chat panel
                     </p>
                     <p className="text-xs text-text-tertiary font-body">
-                      Type your team in the chat on the right — voice input supported too.
+                      Type your team in the chat on the right — voice input
+                      supported too.
                     </p>
                   </div>
                 </div>
 
                 <div className="w-full">
-                  <p className="text-caption text-text-tertiary mb-3">Or search below</p>
+                  <p className="text-caption text-text-tertiary mb-3">
+                    Or search below
+                  </p>
                   <TeamFallback
                     onSubmit={handleTextSubmit}
                     disabled={isProcessing}
@@ -78,7 +73,7 @@ export default function GeneratePage() {
                 </div>
 
                 {error && (
-                  <div className="bg-[var(--color-error)] bg-opacity-10 text-[var(--color-error)] rounded-lg px-4 py-3 text-sm font-body w-full">
+                  <div className="bg-red-50 border border-red-200 text-red-700 rounded-lg px-4 py-3 text-sm font-body w-full">
                     {error}
                   </div>
                 )}
@@ -87,17 +82,6 @@ export default function GeneratePage() {
           </div>
         )}
       </div>
-    </div>
-  );
-}
-
-function Step({ label, done }: { label: string; done?: boolean }) {
-  return (
-    <div className="flex items-center gap-2">
-      <span
-        className={`w-2 h-2 rounded-full ${done ? "bg-[var(--color-success)]" : "bg-[var(--color-border-medium)]"}`}
-      />
-      <span className={done ? "text-text-secondary" : ""}>{label}</span>
     </div>
   );
 }

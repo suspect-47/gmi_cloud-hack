@@ -5,7 +5,7 @@ import { AudioPlayer } from "./AudioPlayer";
 import { SocialCopy } from "./SocialCopy";
 import { GroupBreakdown } from "./GroupBreakdown";
 import { WatchParty } from "./WatchParty";
-import type { Kit } from "@/hooks/usePipeline";
+import type { Kit } from "@/hooks/PipelineContext";
 
 interface KitGalleryProps {
   kit: Kit;

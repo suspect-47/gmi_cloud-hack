@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { createContext, useContext, useState, useCallback } from "react";
 
 export type PipelineStatus = "idle" | "submitting" | "processing" | "complete" | "error";
 
@@ -34,7 +34,21 @@ export interface Kit {
   };
 }
 
-export function usePipeline() {
+interface PipelineContextValue {
+  status: PipelineStatus;
+  kit: Kit | null;
+  error: string | null;
+  generate: (input: {
+    team: string;
+    message?: string;
+    transcript?: string;
+  }) => Promise<Kit | null>;
+  reset: () => void;
+}
+
+const Ctx = createContext<PipelineContextValue | null>(null);
+
+export function PipelineProvider({ children }: { children: React.ReactNode }) {
   const [status, setStatus] = useState<PipelineStatus>("idle");
   const [kit, setKit] = useState<Kit | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -75,5 +89,15 @@ export function usePipeline() {
     setError(null);
   }, []);
 
-  return { status, kit, error, generate, reset };
+  return (
+    <Ctx.Provider value={{ status, kit, error, generate, reset }}>
+      {children}
+    </Ctx.Provider>
+  );
+}
+
+export function usePipelineContext() {
+  const ctx = useContext(Ctx);
+  if (!ctx) throw new Error("usePipelineContext must be used within PipelineProvider");
+  return ctx;
 }
