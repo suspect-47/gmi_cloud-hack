@@ -81,18 +81,23 @@ export async function runFanforgePipeline(
       ? (response as any).answers
       : [];
 
-    // Each branch returns its own JSON. Branch order isn't guaranteed —
-    // identify by shape: creative has image_prompts; analyst has difficulty_rating.
+    // The pipeline returns one combined JSON: { creative, analysis }.
+    // The chat source can emit duplicate questions, so multiple answers
+    // may come back — pick the first ones matching the expected shape.
     let creative: any = null;
     let analyst: any = null;
     for (const a of answers) {
       const parsed = typeof a === "string" ? tryParseJSON(a) : a;
       if (!parsed) continue;
-      if (parsed.image_prompts || parsed.social_copy || parsed.voice_script) {
-        creative = parsed;
-      } else if (parsed.difficulty_rating || parsed.ai_prediction || parsed.key_matchup) {
-        analyst = parsed;
+      if (parsed.creative || parsed.analysis) {
+        creative = creative ?? parsed.creative ?? null;
+        analyst = analyst ?? parsed.analysis ?? null;
+      } else if (parsed.image_prompts || parsed.social_copy) {
+        creative = creative ?? parsed;
+      } else if (parsed.difficulty_rating || parsed.ai_prediction) {
+        analyst = analyst ?? parsed;
       }
+      if (creative && analyst) break;
     }
 
     return { creative, analyst };
