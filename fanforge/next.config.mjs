@@ -1,5 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  experimental: {
+    serverComponentsExternalPackages: ["rocketride", "ws", "bufferutil", "utf-8-validate"],
+  },
   images: {
     remotePatterns: [
       {

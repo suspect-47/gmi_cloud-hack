@@ -1,55 +1,184 @@
 {
-	"components": [
-		{
-			"id": "webhook_1",
-			"provider": "webhook",
-			"config": {
-				"hideForm": true,
-				"mode": "Source",
-				"parameters": {},
-				"type": "webhook"
-			},
-			"ui": {
-				"position": { "x": 20, "y": 200 },
-				"measured": { "width": 150, "height": 66 }
-			}
-		},
-		{
-			"id": "llm_openai_1",
-			"provider": "llm_openai",
-			"config": {
-				"profile": "openai-custom",
-				"openai-custom": {
-					"apikey": "${ROCKETRIDE_GMI_KEY}",
-					"baseUrl": "${ROCKETRIDE_GMI_BASE_URL}",
-					"model": "deepseek-ai/DeepSeek-V3.2"
-				},
-				"parameters": {}
-			},
-			"input": [
-				{ "lane": "text", "from": "webhook_1" }
-			],
-			"ui": {
-				"position": { "x": 240, "y": 200 },
-				"measured": { "width": 150, "height": 66 }
-			}
-		},
-		{
-			"id": "response_text_1",
-			"provider": "response_text",
-			"config": {
-				"laneName": "text"
-			},
-			"input": [
-				{ "lane": "text", "from": "llm_openai_1" }
-			],
-			"ui": {
-				"position": { "x": 460, "y": 200 },
-				"measured": { "width": 150, "height": 66 }
-			}
-		}
-	],
-	"project_id": "e9951ecb-a925-4b47-8c8c-0d31f4c05c8d",
-	"viewport": { "x": 0, "y": 0, "zoom": 1 },
-	"version": 1
+  "components": [
+    {
+      "id": "chat_1",
+      "provider": "chat",
+      "name": "Chat",
+      "config": {
+        "hideForm": true,
+        "mode": "Source",
+        "parameters": {},
+        "type": "chat"
+      },
+      "ui": {
+        "position": {
+          "x": 20,
+          "y": 260
+        },
+        "nodeType": "default",
+        "formDataValid": true
+      }
+    },
+    {
+      "id": "prompt_creative",
+      "provider": "prompt",
+      "name": "Prompt",
+      "config": {
+        "instructions": [
+          "You are a world-class sports creative director producing FIFA World Cup 2026 fan content. The user's message contains a team profile (JSON) plus fan emotion and player mentions.",
+          "Return ONLY valid JSON with this exact shape: {\"image_prompts\":{\"matchday_poster\":\"...\",\"fan_hype_card\":\"...\",\"social_cover\":\"...\"},\"social_copy\":{\"instagram_caption\":\"...\",\"hashtags\":[\"#tag1\",\"#tag2\",\"#tag3\",\"#tag4\",\"#tag5\"],\"twitter_post\":\"...\",\"hot_take\":\"...\"},\"voice_script\":\"30-second narration\",\"watch_party\":{\"dishes\":[{\"name\":\"\",\"description\":\"\",\"emoji\":\"\"}],\"drink\":\"\"}}",
+          "Image prompts must specify lighting, camera angle, exact hex colors from the team profile, atmosphere, composition. Never name or depict real players — use jersey numbers and silhouettes only.",
+          "Voice script should start quiet and build to a crescendo. Social copy should feel like a real fan wrote it, not a brand. No markdown fences. No prose outside the JSON object."
+        ]
+      },
+      "ui": {
+        "position": {
+          "x": 240,
+          "y": 140
+        },
+        "nodeType": "default",
+        "formDataValid": true
+      },
+      "input": [
+        {
+          "lane": "questions",
+          "from": "chat_1"
+        }
+      ]
+    },
+    {
+      "id": "llm_creative",
+      "provider": "llm_gmi_cloud",
+      "name": "GMI Cloud",
+      "config": {
+        "profile": "gemini-3-flash",
+        "custom": {
+          "apikey": "${ROCKETRIDE_GMI_KEY}",
+          "serverbase": "${ROCKETRIDE_GMI_BASE_URL}",
+          "model": "deepseek-ai/DeepSeek-V3.2",
+          "modelTotalTokens": 128000
+        },
+        "parameters": {
+          "temperature": 0.8,
+          "max_tokens": 3000,
+          "google": {}
+        },
+        "gemini-3-flash": {
+          "apikey": "${ROCKETRIDE_GEMINI_KEY}"
+        }
+      },
+      "ui": {
+        "position": {
+          "x": 460,
+          "y": 140
+        },
+        "nodeType": "default",
+        "formDataValid": true
+      },
+      "input": [
+        {
+          "lane": "questions",
+          "from": "prompt_creative"
+        }
+      ]
+    },
+    {
+      "id": "prompt_analyst",
+      "provider": "prompt",
+      "name": "Prompt",
+      "config": {
+        "instructions": [
+          "You are a sharp FIFA World Cup 2026 sports analyst. The user's message contains a team profile JSON (group, opponents, FIFA ranking).",
+          "Return ONLY valid JSON: {\"group\":\"letter\",\"opponents\":[\"team1\",\"team2\",\"team3\"],\"next_match\":{},\"difficulty_rating\":\"Easy|Medium|Hard|Group of Death\",\"ai_prediction\":\"2-3 sentence prediction with confidence\",\"key_matchup\":\"Which group game matters most and why (1 sentence)\"}",
+          "Be punchy and confident. No markdown fences. No prose outside the JSON object."
+        ]
+      },
+      "ui": {
+        "position": {
+          "x": 240,
+          "y": 380
+        },
+        "nodeType": "default",
+        "formDataValid": true
+      },
+      "input": [
+        {
+          "lane": "questions",
+          "from": "chat_1"
+        }
+      ]
+    },
+    {
+      "id": "llm_analyst",
+      "provider": "llm_gmi_cloud",
+      "name": "GMI Cloud",
+      "config": {
+        "profile": "gemini-3-flash",
+        "custom": {
+          "apikey": "${ROCKETRIDE_GMI_KEY}",
+          "serverbase": "${ROCKETRIDE_GMI_BASE_URL}",
+          "model": "deepseek-ai/DeepSeek-V3.2",
+          "modelTotalTokens": 128000
+        },
+        "parameters": {
+          "temperature": 0.6,
+          "max_tokens": 600,
+          "google": {}
+        },
+        "gemini-3-flash": {
+          "apikey": "${ROCKETRIDE_GEMINI_KEY}"
+        }
+      },
+      "ui": {
+        "position": {
+          "x": 460,
+          "y": 380
+        },
+        "nodeType": "default",
+        "formDataValid": true
+      },
+      "input": [
+        {
+          "lane": "questions",
+          "from": "prompt_analyst"
+        }
+      ]
+    },
+    {
+      "id": "response_answers_1",
+      "provider": "response_answers",
+      "name": "Return Answers",
+      "config": {
+        "laneName": "answers"
+      },
+      "ui": {
+        "position": {
+          "x": 680,
+          "y": 260
+        },
+        "nodeType": "default",
+        "formDataValid": true
+      },
+      "input": [
+        {
+          "lane": "answers",
+          "from": "llm_creative"
+        },
+        {
+          "lane": "answers",
+          "from": "llm_analyst"
+        }
+      ]
+    }
+  ],
+  "source": "chat_1",
+  "project_id": "548034ee-80f7-4e77-be88-6468485c61f9",
+  "version": 1,
+  "isLocked": false,
+  "snapToGrid": true,
+  "snapGridSize": [
+    10,
+    10
+  ],
+  "docRevision": 6
 }

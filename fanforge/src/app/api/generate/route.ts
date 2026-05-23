@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { v4 as uuid } from "uuid";
 import { gmiChatWithFallback, gmiExtractIntent } from "@/lib/gmi";
+import { runFanforgePipeline } from "@/lib/rocketride";
 import { getTeamProfile } from "@/lib/gemini";
 import { generateImage, generateTTS } from "@/lib/gmi-media";
 import { kitStore } from "@/lib/store";
@@ -65,15 +66,115 @@ export async function POST(request: NextRequest) {
       };
     }
 
-    /* ── Node 3: Creative director (DeepSeek on GMI) ────────── */
-    const creativePrompt = `
-You are a world-class sports creative director. Given this team profile and fan context, generate a content kit.
+    /* ── Node 3+4: Multi-stage RocketRide pipeline ───────────
+       Single chat call branches into two parallel prompt→LLM
+       branches inside the pipeline (creative director +
+       sports analyst) and merges back into response_answers. */
+    let creativeKit: any = null;
+    let groupAnalysis: any = null;
+    try {
+      const piped = await runFanforgePipeline(teamProfile, {
+        emotion: fanEmotion,
+        players: playerMentions,
+      });
+      creativeKit = piped.creative;
+      groupAnalysis = piped.analyst;
+    } catch {
+      // RocketRide unreachable — run both LLM calls directly against GMI
+      [creativeKit, groupAnalysis] = await Promise.all([
+        directCreative(teamName, teamProfile, fanEmotion, playerMentions),
+        directGroupAnalysis(teamName, teamProfile),
+      ]);
+    }
+
+    /* ── Nodes 5A/5B/5C: Parallel media generation ──────────── */
+    const imagePrompts = creativeKit?.image_prompts;
+    const voiceScript = creativeKit?.voice_script;
+
+    const [posterImg, hypeImg, coverImg, voiceAudio] =
+      await Promise.allSettled([
+        imagePrompts?.matchday_poster
+          ? generateImage(imagePrompts.matchday_poster)
+          : Promise.resolve(null),
+        imagePrompts?.fan_hype_card
+          ? generateImage(imagePrompts.fan_hype_card)
+          : Promise.resolve(null),
+        imagePrompts?.social_cover
+          ? generateImage(imagePrompts.social_cover)
+          : Promise.resolve(null),
+        voiceScript
+          ? generateTTS(voiceScript, "Carter")
+          : Promise.resolve(null),
+      ]);
+
+    const val = <T,>(r: PromiseSettledResult<T>, fallback: T): T =>
+      r.status === "fulfilled" ? r.value : fallback;
+
+    /* ── Node 6: Composer — assemble final kit ──────────────── */
+    const kit = {
+      kit_id: kitId,
+      team: teamName,
+      created_at: new Date().toISOString(),
+      status: "complete" as const,
+      team_profile: teamProfile,
+      creative: creativeKit,
+      assets: {
+        matchday_poster: {
+          prompt: imagePrompts?.matchday_poster ?? null,
+          url: val(posterImg, null),
+        },
+        fan_hype_card: {
+          prompt: imagePrompts?.fan_hype_card ?? null,
+          url: val(hypeImg, null),
+        },
+        social_cover: {
+          prompt: imagePrompts?.social_cover ?? null,
+          url: val(coverImg, null),
+        },
+        voice_hype: {
+          script: voiceScript ?? null,
+          url: val(voiceAudio, null),
+        },
+        social_copy: creativeKit?.social_copy ?? {},
+        group_breakdown: groupAnalysis ?? {
+          group: teamProfile?.group,
+          opponents: teamProfile?.group_opponents,
+          next_match: teamProfile?.next_match,
+          ai_prediction: `${teamName} are contenders to advance from the group stage.`,
+        },
+        watch_party: creativeKit?.watch_party ?? {},
+      },
+    };
+
+    kitStore.set(kitId, kit);
+
+    return NextResponse.json({ kit_id: kitId, status: "complete", kit });
+  } catch (error: any) {
+    console.error("Pipeline error:", error);
+    return NextResponse.json(
+      {
+        error: "Pipeline failed: " + (error.message || "Check API keys and try again."),
+      },
+      { status: 500 }
+    );
+  }
+}
+
+/* ── Direct-GMI fallbacks (used when RocketRide is unreachable) ── */
+
+async function directCreative(
+  team: string,
+  profile: any,
+  emotion: string,
+  players: string[]
+) {
+  const prompt = `You are a world-class sports creative director. Given this team profile and fan context, generate a content kit.
 
 Team profile:
-${JSON.stringify(teamProfile, null, 2)}
+${JSON.stringify(profile, null, 2)}
 
-Fan emotion level: ${fanEmotion}
-Players mentioned: ${playerMentions.join(", ") || "none specifically"}
+Fan emotion level: ${emotion}
+Players mentioned: ${players.join(", ") || "none specifically"}
 
 Return ONLY valid JSON with this exact structure:
 {
@@ -99,108 +200,27 @@ Return ONLY valid JSON with this exact structure:
   }
 }`;
 
-    const creativeRaw = await gmiChatWithFallback(
-      [
-        {
-          role: "system",
-          content:
-            "You are a sports creative director. Respond only in valid JSON. No markdown fences.",
-        },
-        { role: "user", content: creativePrompt },
-      ],
-      { temperature: 0.8, maxTokens: 3000 }
-    );
-
-    let creativeKit: any = null;
-    try {
-      const cleaned = creativeRaw.replace(/```json\n?|```\n?/g, "").trim();
-      creativeKit = JSON.parse(cleaned);
-    } catch {
-      console.error("Failed to parse creative output, raw:", creativeRaw.slice(0, 500));
-    }
-
-    /* ── Nodes 4A/4B/4C/4D: Parallel generation ──────────────── */
-    const imagePrompts = creativeKit?.image_prompts;
-    const voiceScript = creativeKit?.voice_script;
-
-    const [
-      posterImg,
-      hypeImg,
-      coverImg,
-      voiceAudio,
-      groupAnalysis,
-      socialEnhanced,
-    ] = await Promise.allSettled([
-      imagePrompts?.matchday_poster
-        ? generateImage(imagePrompts.matchday_poster)
-        : Promise.resolve(null),
-      imagePrompts?.fan_hype_card
-        ? generateImage(imagePrompts.fan_hype_card)
-        : Promise.resolve(null),
-      imagePrompts?.social_cover
-        ? generateImage(imagePrompts.social_cover)
-        : Promise.resolve(null),
-      voiceScript
-        ? generateTTS(voiceScript, "Carter")
-        : Promise.resolve(null),
-      generateGroupAnalysis(teamName, teamProfile),
-      enhanceSocialCopy(teamName, creativeKit?.social_copy, fanEmotion),
-    ]);
-
-    const val = <T,>(r: PromiseSettledResult<T>, fallback: T): T =>
-      r.status === "fulfilled" ? r.value : fallback;
-
-    /* ── Node 5: Composer — assemble final kit ──────────────── */
-    const kit = {
-      kit_id: kitId,
-      team: teamName,
-      created_at: new Date().toISOString(),
-      status: "complete" as const,
-      team_profile: teamProfile,
-      creative: creativeKit,
-      assets: {
-        matchday_poster: {
-          prompt: imagePrompts?.matchday_poster ?? null,
-          url: val(posterImg, null),
-        },
-        fan_hype_card: {
-          prompt: imagePrompts?.fan_hype_card ?? null,
-          url: val(hypeImg, null),
-        },
-        social_cover: {
-          prompt: imagePrompts?.social_cover ?? null,
-          url: val(coverImg, null),
-        },
-        voice_hype: {
-          script: voiceScript ?? null,
-          url: val(voiceAudio, null),
-        },
-        social_copy: val(socialEnhanced, creativeKit?.social_copy ?? {}),
-        group_breakdown: val(groupAnalysis, {
-          group: teamProfile?.group,
-          opponents: teamProfile?.group_opponents,
-          next_match: teamProfile?.next_match,
-          ai_prediction: `${teamName} are contenders to advance from the group stage.`,
-        }),
-        watch_party: creativeKit?.watch_party ?? {},
-      },
-    };
-
-    kitStore.set(kitId, kit);
-
-    return NextResponse.json({ kit_id: kitId, status: "complete", kit });
-  } catch (error: any) {
-    console.error("Pipeline error:", error);
-    return NextResponse.json(
+  const raw = await gmiChatWithFallback(
+    [
       {
-        error: "Pipeline failed: " + (error.message || "Check API keys and try again."),
+        role: "system",
+        content:
+          "You are a sports creative director. Respond only in valid JSON. No markdown fences.",
       },
-      { status: 500 }
-    );
+      { role: "user", content: prompt },
+    ],
+    { temperature: 0.8, maxTokens: 3000 }
+  );
+
+  try {
+    return JSON.parse(raw.replace(/```json\n?|```\n?/g, "").trim());
+  } catch {
+    console.error("Failed to parse creative output, raw:", raw.slice(0, 500));
+    return null;
   }
 }
 
-async function generateGroupAnalysis(team: string, profile: any) {
+async function directGroupAnalysis(team: string, profile: any) {
   const prompt = `For FIFA World Cup 2026 team ${team}:
 - Group: ${profile?.group || "unknown"}
 - Opponents: ${(profile?.group_opponents || []).join(", ")}
@@ -218,49 +238,15 @@ Provide a brief, punchy group stage analysis. Return ONLY JSON:
 
   const raw = await gmiChatWithFallback(
     [
-      {
-        role: "system",
-        content: "Sports analyst. JSON only. No markdown.",
-      },
+      { role: "system", content: "Sports analyst. JSON only. No markdown." },
       { role: "user", content: prompt },
     ],
     { temperature: 0.6, maxTokens: 500 }
   );
 
-  const cleaned = raw.replace(/```json\n?|```\n?/g, "").trim();
-  return JSON.parse(cleaned);
-}
-
-async function enhanceSocialCopy(
-  team: string,
-  baseCopy: any,
-  emotion: string
-) {
-  if (!baseCopy) return null;
-
-  const prompt = `Enhance this social media copy for ${team} fans (emotion: ${emotion}).
-Current copy: ${JSON.stringify(baseCopy)}
-
-Make it more authentic — like a real fan wrote it, not a brand. Add 3 more relevant hashtags.
-Return ONLY JSON with same structure:
-{
-  "instagram_caption": "...",
-  "hashtags": [...],
-  "twitter_post": "...",
-  "hot_take": "..."
-}`;
-
-  const raw = await gmiChatWithFallback(
-    [
-      {
-        role: "system",
-        content: "Social media copywriter for sports fans. JSON only.",
-      },
-      { role: "user", content: prompt },
-    ],
-    { temperature: 0.9, maxTokens: 800 }
-  );
-
-  const cleaned = raw.replace(/```json\n?|```\n?/g, "").trim();
-  return JSON.parse(cleaned);
+  try {
+    return JSON.parse(raw.replace(/```json\n?|```\n?/g, "").trim());
+  } catch {
+    return null;
+  }
 }
