@@ -1,0 +1,273 @@
+- generic [ref=e1]:
+  - generic [ref=e2]:
+    - complementary [ref=e3]:
+      - link "F" [ref=e4] [cursor=pointer]:
+        - /url: /
+        - generic [ref=e5]: F
+      - navigation [ref=e6]:
+        - link "Home" [ref=e7] [cursor=pointer]:
+          - /url: /
+          - img [ref=e8]
+        - link "Generate" [ref=e11] [cursor=pointer]:
+          - /url: /generate
+          - img [ref=e12]
+        - link "My Kits" [ref=e14] [cursor=pointer]:
+          - /url: "#kits"
+          - img [ref=e15]
+        - link "Leaderboard" [ref=e19] [cursor=pointer]:
+          - /url: "#leaderboard"
+          - img [ref=e20]
+        - link "Settings" [ref=e26] [cursor=pointer]:
+          - /url: "#settings"
+          - img [ref=e27]
+      - button [ref=e30] [cursor=pointer]:
+        - img [ref=e31]
+      - generic [ref=e34]: FF
+    - generic [ref=e35]:
+      - main [ref=e36]:
+        - generic [ref=e37]:
+          - generic [ref=e39]:
+            - heading "Generate Fan Kit" [level=1] [ref=e40]
+            - paragraph [ref=e41]: Speak or type your team — AI does the rest
+          - generic [ref=e43]:
+            - generic [ref=e44]:
+              - heading "Who do you support?" [level=2] [ref=e45]
+              - paragraph [ref=e46]: Speak into the mic or type your team below
+            - generic [ref=e55]:
+              - generic [ref=e66]:
+                - img [ref=e67]
+                - textbox "Search 48 World Cup teams..." [active] [ref=e70]
+                - list [ref=e72]:
+                  - listitem [ref=e73]:
+                    - button "🇦🇷 Argentina" [ref=e74] [cursor=pointer]:
+                      - generic [ref=e75]: 🇦🇷
+                      - generic [ref=e76]: Argentina
+                  - listitem [ref=e77]:
+                    - button "🇦🇺 Australia" [ref=e78] [cursor=pointer]:
+                      - generic [ref=e79]: 🇦🇺
+                      - generic [ref=e80]: Australia
+                  - listitem [ref=e81]:
+                    - button "🇦🇹 Austria" [ref=e82] [cursor=pointer]:
+                      - generic [ref=e83]: 🇦🇹
+                      - generic [ref=e84]: Austria
+                  - listitem [ref=e85]:
+                    - button "🇧🇪 Belgium" [ref=e86] [cursor=pointer]:
+                      - generic [ref=e87]: 🇧🇪
+                      - generic [ref=e88]: Belgium
+                  - listitem [ref=e89]:
+                    - button "🇧🇴 Bolivia" [ref=e90] [cursor=pointer]:
+                      - generic [ref=e91]: 🇧🇴
+                      - generic [ref=e92]: Bolivia
+                  - listitem [ref=e93]:
+                    - button "🇧🇷 Brazil" [ref=e94] [cursor=pointer]:
+                      - generic [ref=e95]: 🇧🇷
+                      - generic [ref=e96]: Brazil
+                  - listitem [ref=e97]:
+                    - button "🇨🇲 Cameroon" [ref=e98] [cursor=pointer]:
+                      - generic [ref=e99]: 🇨🇲
+                      - generic [ref=e100]: Cameroon
+                  - listitem [ref=e101]:
+                    - button "🇨🇦 Canada" [ref=e102] [cursor=pointer]:
+                      - generic [ref=e103]: 🇨🇦
+                      - generic [ref=e104]: Canada
+                  - listitem [ref=e105]:
+                    - button "🇨🇱 Chile" [ref=e106] [cursor=pointer]:
+                      - generic [ref=e107]: 🇨🇱
+                      - generic [ref=e108]: Chile
+                  - listitem [ref=e109]:
+                    - button "🇨🇴 Colombia" [ref=e110] [cursor=pointer]:
+                      - generic [ref=e111]: 🇨🇴
+                      - generic [ref=e112]: Colombia
+                  - listitem [ref=e113]:
+                    - button "🇨🇷 Costa Rica" [ref=e114] [cursor=pointer]:
+                      - generic [ref=e115]: 🇨🇷
+                      - generic [ref=e116]: Costa Rica
+                  - listitem [ref=e117]:
+                    - button "🇭🇷 Croatia" [ref=e118] [cursor=pointer]:
+                      - generic [ref=e119]: 🇭🇷
+                      - generic [ref=e120]: Croatia
+                  - listitem [ref=e121]:
+                    - button "🇨🇿 Czech Republic" [ref=e122] [cursor=pointer]:
+                      - generic [ref=e123]: 🇨🇿
+                      - generic [ref=e124]: Czech Republic
+                  - listitem [ref=e125]:
+                    - button "🇩🇰 Denmark" [ref=e126] [cursor=pointer]:
+                      - generic [ref=e127]: 🇩🇰
+                      - generic [ref=e128]: Denmark
+                  - listitem [ref=e129]:
+                    - button "🇪🇨 Ecuador" [ref=e130] [cursor=pointer]:
+                      - generic [ref=e131]: 🇪🇨
+                      - generic [ref=e132]: Ecuador
+                  - listitem [ref=e133]:
+                    - button "🇪🇬 Egypt" [ref=e134] [cursor=pointer]:
+                      - generic [ref=e135]: 🇪🇬
+                      - generic [ref=e136]: Egypt
+                  - listitem [ref=e137]:
+                    - button "🏴󠁧󠁢󠁥󠁮󠁧󠁿 England" [ref=e138] [cursor=pointer]:
+                      - generic [ref=e139]: 🏴󠁧󠁢󠁥󠁮󠁧󠁿
+                      - generic [ref=e140]: England
+                  - listitem [ref=e141]:
+                    - button "🇫🇷 France" [ref=e142] [cursor=pointer]:
+                      - generic [ref=e143]: 🇫🇷
+                      - generic [ref=e144]: France
+                  - listitem [ref=e145]:
+                    - button "🇩🇪 Germany" [ref=e146] [cursor=pointer]:
+                      - generic [ref=e147]: 🇩🇪
+                      - generic [ref=e148]: Germany
+                  - listitem [ref=e149]:
+                    - button "🇬🇭 Ghana" [ref=e150] [cursor=pointer]:
+                      - generic [ref=e151]: 🇬🇭
+                      - generic [ref=e152]: Ghana
+                  - listitem [ref=e153]:
+                    - button "🇮🇩 Indonesia" [ref=e154] [cursor=pointer]:
+                      - generic [ref=e155]: 🇮🇩
+                      - generic [ref=e156]: Indonesia
+                  - listitem [ref=e157]:
+                    - button "🇮🇷 Iran" [ref=e158] [cursor=pointer]:
+                      - generic [ref=e159]: 🇮🇷
+                      - generic [ref=e160]: Iran
+                  - listitem [ref=e161]:
+                    - button "🇮🇶 Iraq" [ref=e162] [cursor=pointer]:
+                      - generic [ref=e163]: 🇮🇶
+                      - generic [ref=e164]: Iraq
+                  - listitem [ref=e165]:
+                    - button "🇮🇹 Italy" [ref=e166] [cursor=pointer]:
+                      - generic [ref=e167]: 🇮🇹
+                      - generic [ref=e168]: Italy
+                  - listitem [ref=e169]:
+                    - button "🇨🇮 Ivory Coast" [ref=e170] [cursor=pointer]:
+                      - generic [ref=e171]: 🇨🇮
+                      - generic [ref=e172]: Ivory Coast
+                  - listitem [ref=e173]:
+                    - button "🇯🇲 Jamaica" [ref=e174] [cursor=pointer]:
+                      - generic [ref=e175]: 🇯🇲
+                      - generic [ref=e176]: Jamaica
+                  - listitem [ref=e177]:
+                    - button "🇯🇵 Japan" [ref=e178] [cursor=pointer]:
+                      - generic [ref=e179]: 🇯🇵
+                      - generic [ref=e180]: Japan
+                  - listitem [ref=e181]:
+                    - button "🇲🇽 Mexico" [ref=e182] [cursor=pointer]:
+                      - generic [ref=e183]: 🇲🇽
+                      - generic [ref=e184]: Mexico
+                  - listitem [ref=e185]:
+                    - button "🇲🇦 Morocco" [ref=e186] [cursor=pointer]:
+                      - generic [ref=e187]: 🇲🇦
+                      - generic [ref=e188]: Morocco
+                  - listitem [ref=e189]:
+                    - button "🇳🇱 Netherlands" [ref=e190] [cursor=pointer]:
+                      - generic [ref=e191]: 🇳🇱
+                      - generic [ref=e192]: Netherlands
+                  - listitem [ref=e193]:
+                    - button "🇳🇿 New Zealand" [ref=e194] [cursor=pointer]:
+                      - generic [ref=e195]: 🇳🇿
+                      - generic [ref=e196]: New Zealand
+                  - listitem [ref=e197]:
+                    - button "🇳🇬 Nigeria" [ref=e198] [cursor=pointer]:
+                      - generic [ref=e199]: 🇳🇬
+                      - generic [ref=e200]: Nigeria
+                  - listitem [ref=e201]:
+                    - button "🇳🇴 Norway" [ref=e202] [cursor=pointer]:
+                      - generic [ref=e203]: 🇳🇴
+                      - generic [ref=e204]: Norway
+                  - listitem [ref=e205]:
+                    - button "🇵🇦 Panama" [ref=e206] [cursor=pointer]:
+                      - generic [ref=e207]: 🇵🇦
+                      - generic [ref=e208]: Panama
+                  - listitem [ref=e209]:
+                    - button "🇵🇾 Paraguay" [ref=e210] [cursor=pointer]:
+                      - generic [ref=e211]: 🇵🇾
+                      - generic [ref=e212]: Paraguay
+                  - listitem [ref=e213]:
+                    - button "🇵🇪 Peru" [ref=e214] [cursor=pointer]:
+                      - generic [ref=e215]: 🇵🇪
+                      - generic [ref=e216]: Peru
+                  - listitem [ref=e217]:
+                    - button "🇵🇱 Poland" [ref=e218] [cursor=pointer]:
+                      - generic [ref=e219]: 🇵🇱
+                      - generic [ref=e220]: Poland
+                  - listitem [ref=e221]:
+                    - button "🇵🇹 Portugal" [ref=e222] [cursor=pointer]:
+                      - generic [ref=e223]: 🇵🇹
+                      - generic [ref=e224]: Portugal
+                  - listitem [ref=e225]:
+                    - button "🇶🇦 Qatar" [ref=e226] [cursor=pointer]:
+                      - generic [ref=e227]: 🇶🇦
+                      - generic [ref=e228]: Qatar
+                  - listitem [ref=e229]:
+                    - button "🇸🇦 Saudi Arabia" [ref=e230] [cursor=pointer]:
+                      - generic [ref=e231]: 🇸🇦
+                      - generic [ref=e232]: Saudi Arabia
+                  - listitem [ref=e233]:
+                    - button "🏴󠁧󠁢󠁳󠁣󠁴󠁿 Scotland" [ref=e234] [cursor=pointer]:
+                      - generic [ref=e235]: 🏴󠁧󠁢󠁳󠁣󠁴󠁿
+                      - generic [ref=e236]: Scotland
+                  - listitem [ref=e237]:
+                    - button "🇸🇳 Senegal" [ref=e238] [cursor=pointer]:
+                      - generic [ref=e239]: 🇸🇳
+                      - generic [ref=e240]: Senegal
+                  - listitem [ref=e241]:
+                    - button "🇷🇸 Serbia" [ref=e242] [cursor=pointer]:
+                      - generic [ref=e243]: 🇷🇸
+                      - generic [ref=e244]: Serbia
+                  - listitem [ref=e245]:
+                    - button "🇿🇦 South Africa" [ref=e246] [cursor=pointer]:
+                      - generic [ref=e247]: 🇿🇦
+                      - generic [ref=e248]: South Africa
+                  - listitem [ref=e249]:
+                    - button "🇰🇷 South Korea" [ref=e250] [cursor=pointer]:
+                      - generic [ref=e251]: 🇰🇷
+                      - generic [ref=e252]: South Korea
+                  - listitem [ref=e253]:
+                    - button "🇪🇸 Spain" [ref=e254] [cursor=pointer]:
+                      - generic [ref=e255]: 🇪🇸
+                      - generic [ref=e256]: Spain
+                  - listitem [ref=e257]:
+                    - button "🇨🇭 Switzerland" [ref=e258] [cursor=pointer]:
+                      - generic [ref=e259]: 🇨🇭
+                      - generic [ref=e260]: Switzerland
+                  - listitem [ref=e261]:
+                    - button "🇹🇹 Trinidad and Tobago" [ref=e262] [cursor=pointer]:
+                      - generic [ref=e263]: 🇹🇹
+                      - generic [ref=e264]: Trinidad and Tobago
+                  - listitem [ref=e265]:
+                    - button "🇹🇳 Tunisia" [ref=e266] [cursor=pointer]:
+                      - generic [ref=e267]: 🇹🇳
+                      - generic [ref=e268]: Tunisia
+                  - listitem [ref=e269]:
+                    - button "🇹🇷 Türkiye" [ref=e270] [cursor=pointer]:
+                      - generic [ref=e271]: 🇹🇷
+                      - generic [ref=e272]: Türkiye
+                  - listitem [ref=e273]:
+                    - button "🇺🇦 Ukraine" [ref=e274] [cursor=pointer]:
+                      - generic [ref=e275]: 🇺🇦
+                      - generic [ref=e276]: Ukraine
+                  - listitem [ref=e277]:
+                    - button "🇺🇸 United States" [ref=e278] [cursor=pointer]:
+                      - generic [ref=e279]: 🇺🇸
+                      - generic [ref=e280]: United States
+                  - listitem [ref=e281]:
+                    - button "🇺🇾 Uruguay" [ref=e282] [cursor=pointer]:
+                      - generic [ref=e283]: 🇺🇾
+                      - generic [ref=e284]: Uruguay
+                  - listitem [ref=e285]:
+                    - button "🇺🇿 Uzbekistan" [ref=e286] [cursor=pointer]:
+                      - generic [ref=e287]: 🇺🇿
+                      - generic [ref=e288]: Uzbekistan
+                  - listitem [ref=e289]:
+                    - button "🇻🇪 Venezuela" [ref=e290] [cursor=pointer]:
+                      - generic [ref=e291]: 🇻🇪
+                      - generic [ref=e292]: Venezuela
+                  - listitem [ref=e293]:
+                    - button "🏴󠁧󠁢󠁷󠁬󠁳󠁿 Wales" [ref=e294] [cursor=pointer]:
+                      - generic [ref=e295]: 🏴󠁧󠁢󠁷󠁬󠁳󠁿
+                      - generic [ref=e296]: Wales
+              - button "← Use voice instead" [ref=e71] [cursor=pointer]
+      - contentinfo [ref=e57]:
+        - generic [ref=e58]: Powered by
+        - generic [ref=e59]: RocketRide
+        - generic [ref=e60]: ×
+        - generic [ref=e61]: GMI Cloud
+        - generic [ref=e62]: ×
+        - generic [ref=e63]: Google AI Studio
+  - alert [ref=e64]
