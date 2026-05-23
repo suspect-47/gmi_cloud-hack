@@ -25,7 +25,7 @@
       "provider": "prompt",
       "config": {
         "instructions": [
-          "You are wearing two hats for a FIFA World Cup 2026 fan content engine: (a) creative director — designs poster/voice/social copy from the team profile, (b) sports analyst — predicts the team's group-stage path.",
+          "You wear two hats for a FIFA World Cup 2026 fan content engine: (a) creative director — designs poster/voice/social copy from the team profile, (b) sports analyst — predicts the team's group-stage path.",
           "The user's message contains a team profile JSON plus fan emotion and player mentions.",
           "Return ONLY a single JSON object with both perspectives, exact shape: {\"creative\":{\"image_prompts\":{\"matchday_poster\":\"...\",\"fan_hype_card\":\"...\",\"social_cover\":\"...\"},\"social_copy\":{\"instagram_caption\":\"...\",\"hashtags\":[\"#a\",\"#b\",\"#c\",\"#d\",\"#e\"],\"twitter_post\":\"...\",\"hot_take\":\"...\"},\"voice_script\":\"30-second narration\",\"watch_party\":{\"dishes\":[{\"name\":\"\",\"description\":\"\",\"emoji\":\"\"}],\"drink\":\"\"}},\"analysis\":{\"group\":\"letter\",\"opponents\":[\"\",\"\",\"\"],\"next_match\":{},\"difficulty_rating\":\"Easy|Medium|Hard|Group of Death\",\"ai_prediction\":\"2-3 sentence prediction\",\"key_matchup\":\"1 sentence\"}}",
           "Image prompts must specify lighting, camera angle, exact hex colors from the team profile, atmosphere, composition. Never name or depict real players — use jersey numbers and silhouettes only.",
@@ -81,10 +81,15 @@
       }
     },
     {
-      "id": "response_answers_1",
-      "provider": "response_answers",
+      "id": "guardrails_json",
+      "provider": "guardrails",
       "config": {
-        "laneName": "answers"
+        "profile": "strict",
+        "strict": {
+          "expected_format": "json",
+          "max_tokens_estimate": 0,
+          "policy_mode": "warn"
+        }
       },
       "input": [
         {
@@ -102,9 +107,32 @@
           "height": 66
         }
       }
+    },
+    {
+      "id": "response_answers_1",
+      "provider": "response_answers",
+      "config": {
+        "laneName": "answers"
+      },
+      "input": [
+        {
+          "lane": "answers",
+          "from": "guardrails_json"
+        }
+      ],
+      "ui": {
+        "position": {
+          "x": 900,
+          "y": 200
+        },
+        "measured": {
+          "width": 150,
+          "height": 66
+        }
+      }
     }
   ],
   "source": "chat_1",
-  "project_id": "826d2502-e9cb-433d-8b5e-9e430bcc6aae",
+  "project_id": "abec27f7-f1db-4445-86e0-8059803a4308",
   "version": 1
 }
